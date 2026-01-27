@@ -28,3 +28,9 @@ export const deleteTask = async (id) => {
     method: 'DELETE',
   });
 };
+
+export const getTaskById = async (id) => {
+  const res = await fetch(`${API_URL}/${id}`);
+  return res.json();
+};
+

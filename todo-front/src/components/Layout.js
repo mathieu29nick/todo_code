@@ -20,8 +20,9 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getTasks, createTask, deleteTask, updateTask  } from '../services/tachesAPI';
+import { getTasks, createTask, deleteTask, updateTask, getTaskById  } from '../services/tachesAPI';
 import AddTask from './AddTask';
+import ItemTask from './ItemTask';
 
 const Layout = () => {
   const [tasks, setTasks] = useState([]);
@@ -33,7 +34,7 @@ const Layout = () => {
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
+  const [openView, setOpenView] = useState(false);
 
   useEffect(() => {
     getTasks().then(setTasks);
@@ -41,6 +42,12 @@ const Layout = () => {
 
   const loadTasks = () => {
     getTasks().then(setTasks);
+  };
+
+  const handleView = async (id) => {
+    const task = await getTaskById(id);
+    setSelectedTask(task);
+    setOpenView(true);
   };
 
   const handleAddTask = async (task) => {
@@ -142,7 +149,12 @@ const Layout = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((task) => (
                 <TableRow key={task.id}>
-                  <TableCell>{task.title}</TableCell>
+                  <TableCell
+                    sx={{ cursor: 'pointer', color: 'primary.main' }}
+                    onClick={() => handleView(task.id)}
+                  >
+                    {task.title}
+                  </TableCell>
                   <TableCell>{task.content}</TableCell>
                   <TableCell>
                     {new Date(task.date).toLocaleDateString()}
@@ -214,6 +226,15 @@ const Layout = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ItemTask
+        open={openView}
+        onClose={() => {
+          setOpenView(false);
+          setSelectedTask(null);
+        }}
+        task={selectedTask}
+      />
     </Paper>
   );
 };
