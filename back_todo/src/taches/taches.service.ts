@@ -10,11 +10,10 @@ export class TachesService {
     private readonly tacheRepository: Repository<Taches>
   ){}
 
-  async createTache(body: Taches): Promise<string> {
+  async createTache(body: Taches): Promise<Taches> {
     try {
       const tache = this.tacheRepository.create(body);
-      await this.tacheRepository.save(tache);
-      return `La tâche ${tache.title} a été postée`;
+      return await this.tacheRepository.save(tache);
     } catch (error) {
       console.error(error);
       throw new Error('Impossible de créer cette tâche');
