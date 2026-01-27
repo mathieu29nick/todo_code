@@ -1,0 +1,25 @@
+### add
+POST http://localhost:3000/taches
+Content-Type: application/json
+
+{
+  "title": "Task 10",
+  "content": "Content task number 10"
+}
+
+### getAll
+GET http://localhost:3000/taches
+
+### find by id
+GET http://localhost:3000/taches/15
+
+### remove
+DELETE http://localhost:3000/taches/12
+
+### update 
+PATCH http://localhost:3000/taches/15
+Content-Type: application/json
+
+{
+  "status": 3
+}
